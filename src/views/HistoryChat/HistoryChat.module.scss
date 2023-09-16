@@ -1,0 +1,287 @@
+@import '@/styles/variable.scss';
+@import '@/styles/animation';
+
+.sidebar {
+  position: fixed;
+  z-index: 99;
+  width: 260px;
+  top: 0%;
+  bottom: 0%;
+  height: 100vh;
+  transition: all 0.3s ease 0s;
+  -webkit-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  background-color: rgba(32, 33, 35, 1);
+
+  .sidebar_box {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    height: 100%;
+
+    .sidebar__top {
+      margin-top: 0.5rem;
+      padding: 0 0.5rem;
+      height: 44px;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+
+      > div {
+        height: 100%;
+        border-color: hsla(0, 0%, 100%, 0.2);
+        border-width: 1px;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        padding: 0.75rem;
+        color: #fff;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+
+      .sidebar__newchat {
+        flex: 1;
+
+        > span:last-child {
+          margin-left: 0.75rem;
+        }
+      }
+
+      .sidebar__toggle {
+        width: 44px;
+
+        > svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .sidebar__middle {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 0.5rem;
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: rgba($color: #000000, $alpha: 0.1);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba($color: #888, $alpha: 0.68);
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .sidebar__middle_list {
+        display: flex;
+        flex-direction: column;
+        -ms-flex-direction: column;
+        animation: browseIn 1s ease-in-out 0s 1 normal forwards;
+        -webkit-animation: browseIn 1s ease-in-out 0s 1 normal forwards;
+        -moz-animation: browseIn 1s ease-in-out 0s 1 normal forwards;
+        -o-animation: browseIn 1s ease-in-out 0s 1 normal forwards;
+
+        > button {
+          border-radius: 0.375rem;
+          background-color: rgba(32, 33, 35, 1);
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          font-size: 14px;
+
+          &:hover {
+            background-color: rgba(42, 43, 50, 1);
+          }
+        }
+      }
+    }
+  }
+
+  .switch_theme_container {
+    border-top: 1px solid #dee2e6;
+    width: 100%;
+    padding: 20px;
+
+    .switch {
+      font-size: 17px;
+      position: relative;
+      display: inline-block;
+      width: 64px;
+      height: 34px;
+      cursor: pointer;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider_dark {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #fff;
+      border-radius: 30px;
+    }
+
+    .slider_dark:after {
+      position: absolute;
+      content: '';
+      height: 30px;
+      width: 30px;
+      border-radius: 20px;
+      left: 2px;
+      bottom: 2px;
+      z-index: 2;
+      background-color: #000;
+      transition: all 0.4s ease;
+    }
+
+    .slider_light {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #183153;
+      border-radius: 30px;
+    }
+
+    .slider_light:after {
+      transform: translateX(30px);
+      position: absolute;
+      content: '';
+      height: 30px;
+      width: 30px;
+      border-radius: 20px;
+      left: 2px;
+      bottom: 2px;
+      z-index: 2;
+      background-color: #fff;
+      transition: all 0.4s ease;
+    }
+
+    .sun svg {
+      position: absolute;
+      top: 6px;
+      left: 36px;
+      z-index: 1;
+      width: 24px;
+      height: 24px;
+    }
+
+    .moon svg {
+      fill: #fff;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      z-index: 1;
+      width: 24px;
+      height: 24px;
+    }
+
+    /* .switch:hover */
+    .sun svg {
+      animation: rotate 15s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* .switch:hover */
+    .moon svg {
+      animation: tilt 5s linear infinite;
+    }
+
+    @keyframes tilt {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-10deg);
+      }
+
+      75% {
+        transform: rotate(10deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    .input:checked + .slider_dark {
+      background-color: #fff;
+    }
+
+    .input:focus + .slider_dark {
+      box-shadow: 0 0 1px #183153;
+    }
+
+    .input:checked + .slider_dark:after {
+      transform: translateX(0px);
+      background-color: #000;
+    }
+  }
+}
+
+.sidebar.sidebar-open {
+  transform: translateX(0%);
+  -webkit-transform: translateX(0%);
+  -moz-transform: translateX(0%);
+  -o-transform: translateX(0%);
+  -ms-transform: translateX(0%);
+}
+
+.sidebar.sidebar-close {
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+}
+
+.button_logout {
+  padding: 0 20px 10px;
+  span {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .image_name {
+    padding: 5px;
+    border: 1px solid hsla(0, 0%, 100%, 0.2);
+    background: #29af29;
+    text-transform: uppercase;
+    margin-right: 10px;
+    // width: 30px;
+    line-height: 20px;
+    font-size: 14px;
+  }
+  .text_email {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
