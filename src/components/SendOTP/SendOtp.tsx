@@ -4,28 +4,17 @@ import { Button, Col, Form, Input, Row } from 'antd';
 import styles from '../Login/styles.module.scss';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import {
-  authLogin,
-  authSelector,
-  // authLoginGoogle,
-  // authLoginWithFacebook,
-  // authSelector,
-  // resetCheckOtpResponse,
-  // resetRecoveryResponse,
-  // sendOTP,
-} from '@/api/auth';
+import { authSelector, sendOTP } from '@/api/auth';
 import { useRouter } from 'next/navigation';
-import { KEY_TOKEN } from '@/config/constants';
-import Cookies from 'js-cookie';
-import GoogleIcon from '@/assets/icons/google.svg';
-// import { OTPCodeType, OTPCodeTypeString } from '@/config/enum';
-// import { AuthLayout } from '../AuthLayout';
 import Logo from '@/assets/icons/brain.svg';
+import { KEY_AUTH_INFO } from '@/config/constants';
+import { AuthLoginResponse } from '@/types/api/auth';
 
 const SendOTP: FC = () => {
   const dispatch = useAppDispatch();
-  const { responseAuthLogin, pending } = useAppSelector(authSelector);
+  const { responseSendOTP, responseAuthLogin, pending } = useAppSelector(authSelector);
   const [form] = Form.useForm();
+  const [responseLogin, setResponseLogin] = useState<AuthLoginResponse>();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -34,9 +23,13 @@ const SendOTP: FC = () => {
     form
       .validateFields()
       .then(() => {
-        dispatch(authLogin({ ...form.getFieldsValue() }));
+        dispatch(
+          sendOTP({
+            userId: `${responseAuthLogin ? responseAuthLogin?.data : responseLogin ? responseLogin.data : ''}`,
+            otp: parseInt(form.getFieldValue('OTP')),
+          }),
+        );
       })
-      .then(() => router.push('/login'))
       .catch(() => {
         form.submit();
       });
@@ -46,6 +39,17 @@ const SendOTP: FC = () => {
       setLoading(false);
     }, 1000);
   }, []);
+
+  useEffect(() => {
+    // if (responseAuthLogin === undefined) {
+    //   router.push('/login');
+    // }
+    if (responseSendOTP?.success === true) {
+      window.localStorage.setItem(KEY_AUTH_INFO, JSON.stringify(null));
+      router.push('/welcome');
+    }
+    setResponseLogin(JSON.parse(`${window.localStorage.getItem(KEY_AUTH_INFO)}`));
+  }, [responseAuthLogin, responseSendOTP]);
 
   return (
     <div className="w-screen h-screen bg-white">
@@ -69,12 +73,12 @@ const SendOTP: FC = () => {
                   <Image src={Logo} alt="" width={70} />
                   <Col style={{ fontSize: 27 }}>SIA</Col>
                 </Row>
-                <div style={{ fontSize: 27, marginTop: 30 }}>
-                  Mã OTP đã được gửi đến Email của bạn, vui lòng không chia sẻ mã này.
+                <div style={{ fontSize: 27, marginTop: 30, letterSpacing: 1 }}>
+                  Nhập mã OTP trên ứng dụng OTPClient của bạn!
                 </div>
               </h1>
 
-              <Form.Item name="code">
+              <Form.Item name="OTP">
                 <Input placeholder="Nhập mã OTP" className={styles.enter_input} />
               </Form.Item>
 
@@ -83,11 +87,11 @@ const SendOTP: FC = () => {
                   Gửi
                 </Button>
               </div>
-              <div className={styles.register_wrap}>
+              {/* <div className={styles.register_wrap}>
                 <span className={styles.link_register} onClick={() => router.push('/login')}>
                   Đăng nhập
                 </span>
-              </div>
+              </div> */}
             </>
           )}
         </Form>

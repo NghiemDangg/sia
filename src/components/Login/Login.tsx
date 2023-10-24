@@ -16,11 +16,8 @@ import {
   // sendOTP,
 } from '@/api/auth';
 import { useRouter } from 'next/navigation';
-import { KEY_TOKEN } from '@/config/constants';
-import Cookies from 'js-cookie';
-import GoogleIcon from '@/assets/icons/google.svg';
-// import { OTPCodeType, OTPCodeTypeString } from '@/config/enum';
-// import { AuthLayout } from '../AuthLayout';
+import { KEY_TOKEN, REGEX_PASSWORD } from '@/config/constants';
+
 import Logo from '@/assets/icons/brain.svg';
 
 const Login: FC = () => {
@@ -48,8 +45,8 @@ const Login: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (Cookies.get(KEY_TOKEN) && responseAuthLogin) {
-      router.push('/newchat');
+    if (responseAuthLogin?.success === true) {
+      router.push('/sendOTP');
     }
   }, [responseAuthLogin]);
 
@@ -70,7 +67,6 @@ const Login: FC = () => {
           ) : (
             <>
               <h1 className="flex flex-col max-w-xl mx-auto mt-2 mb-8 sm:mt-10 sm:mb-10 text-3xl font-semibold tracking-tighter text-center md:leading-tight md:text-4xl font-display text-black">
-                {/* SIA */}
                 <Row align="middle">
                   <Image src={Logo} alt="" width={70} />
                   <Col style={{ fontSize: 27 }}>SIA</Col>
@@ -79,15 +75,24 @@ const Login: FC = () => {
               </h1>
 
               <Form.Item
-                name="email"
+                name="username"
                 rules={[
-                  { required: true, message: 'Vui lòng nhập email' },
-                  { type: 'email', message: 'Vui lòng nhập đúng địng dạng mail' },
+                  { required: true, message: 'Vui lòng nhập user name' },
+                  // { type: 'email', message: 'Vui lòng nhập đúng địng dạng mail' },
                 ]}
               >
-                <Input placeholder="Email" className={styles.enter_input} />
+                <Input placeholder="user name" className={styles.enter_input} />
               </Form.Item>
-              <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
+              <Form.Item
+                name="password"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập mật khẩu' },
+                  {
+                    pattern: REGEX_PASSWORD,
+                    message: 'Mật khẩu tối thiểu 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt!',
+                  },
+                ]}
+              >
                 <Input.Password placeholder="Mật khẩu" className={styles.enter_password} />
               </Form.Item>
               <div className={styles.button_login}>
@@ -99,18 +104,9 @@ const Login: FC = () => {
                 <span className={styles.link_register} onClick={() => router.push('/register')}>
                   Đăng ký
                 </span>
-                <span className={styles.link_register} onClick={() => router.push('/forgotpassword')}>
+                {/* <span className={styles.link_register} onClick={() => router.push('/forgotpassword')}>
                   Quên mật khẩu
-                </span>
-              </div>
-              <div className={styles.line}>
-                <span className={styles.line_text}>hoặc</span>
-              </div>
-              <div className={styles.another_sign_up_wrap}>
-                <Button className={styles.another_sign_up}>
-                  <Image className={styles.sign_up_icon} src={GoogleIcon} width={20} height={20} alt="google icon" />
-                  Đăng nhập bằng google
-                </Button>
+                </span> */}
               </div>
             </>
           )}

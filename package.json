@@ -15,7 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@greatsumini/react-facebook-login": "^3.3.3",
     "@reduxjs/toolkit": "^1.9.5",
-    "antd": "^5.7.0",
+    "antd": "^5.9.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "dayjs": "^1.11.9",
@@ -30,6 +30,7 @@
     "react-bootstrap": "^2.8.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.1.1",
+    "tailwindcss": "^3.3.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
